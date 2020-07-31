@@ -3,16 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace Linalg
 {
-    using S_SELECT2 = System.Int64; //ptr
-    using S_SELECT3 = System.Int64; //ptr
-    using D_SELECT2 = System.Int64; //ptr
-    using D_SELECT3 = System.Int64; //ptr
-    using C_SELECT1 = System.Int64; //ptr
-    using C_SELECT2 = System.Int64; //ptr
-    using Z_SELECT1 = System.Int64; //ptr
-    using Z_SELECT2 = System.Int64; //ptr
-
-    using INDEX = System.Int32; //int
+    using LOGICAL = System.Int32;
+    using INDEX = System.Int32;
     public struct complex_float
     {
         float re;
@@ -24,14 +16,26 @@ namespace Linalg
         double im;
     };
 
+    /* Callback logical functions of one, two, or three arguments are used
+    *  to select eigenvalues to sort to the top left of the Schur form.
+    *  The value is selected if function returns TRUE (non-zero). */
+    public delegate LOGICAL S_SELECT2 (ref float a, ref float b);
+    public delegate LOGICAL S_SELECT3 (ref float a, ref float b, ref float c);
+    public delegate LOGICAL D_SELECT2 (ref double a, ref double b);
+    public delegate LOGICAL D_SELECT3 (ref double a, ref double b, ref double c);
+    public delegate LOGICAL C_SELECT1 (ref complex_float a);
+    public delegate LOGICAL C_SELECT2 (ref complex_float a, ref complex_float b);
+    public delegate LOGICAL Z_SELECT1 (ref complex_double a);
+    public delegate LOGICAL Z_SELECT2 (ref complex_double a, ref complex_double b);
+
+    public enum LAYOUT { RowMajor = 101, ColMajor = 102 };
+    public enum TRANSPOSE { NoTrans = 111, Trans = 112, ConjTrans = 113 };
+    public enum UPLO { Upper = 121, Lower = 122 };
+    public enum DIAG { NonUnit = 131, Unit = 132 };
+    public enum SIDE { Left = 141, Right = 142 };
+
     public static class BLAS
     {
-        public enum LAYOUT { RowMajor = 101, ColMajor = 102 };
-        public enum TRANSPOSE { NoTrans = 111, Trans = 112, ConjTrans = 113 };
-        public enum UPLO { Upper = 121, Lower = 122 };
-        public enum DIAG { NonUnit = 131, Unit = 132 };
-        public enum SIDE { Left = 141, Right = 142 };
-
         /*                                                         
         * ===========================================================================                                                       
         * Prototypes for level 1 BLAS functions (complex are recast as routines)                                             
@@ -730,7 +734,6 @@ namespace Linalg
               ref complex_double B, ref int ldb, ref double beta,
               ref complex_double C, ref int ldc);
     }
-
 
     public static class LAPACK
     {
