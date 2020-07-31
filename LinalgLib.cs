@@ -19,6 +19,7 @@ namespace Linalg
     /* Callback logical functions of one, two, or three arguments are used
     *  to select eigenvalues to sort to the top left of the Schur form.
     *  The value is selected if function returns TRUE (non-zero). */
+
     public delegate LOGICAL S_SELECT2 (ref float a, ref float b);
     public delegate LOGICAL S_SELECT3 (ref float a, ref float b, ref float c);
     public delegate LOGICAL D_SELECT2 (ref double a, ref double b);
